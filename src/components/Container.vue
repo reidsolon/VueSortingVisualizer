@@ -12,13 +12,16 @@
             </template>
         </ActionBar>
         <div class="row ">
-            <div class="array--container col-12">
-                <template v-for="(bar,i) in data.arrayBar">
-                    <Bar 
-                        :key="i" 
-                        :value="bar">{{bar}}
-                    </Bar>
-                </template>
+            <div class="col-12">
+                <div class="mx-auto array--container">
+                    <template v-for="(bar,i) in data.arrayBar">
+                        <Bar 
+                            :key="i" 
+                            :value="bar">{{bar}}
+                        </Bar>
+                    </template>
+                </div>
+                
             </div>
         </div>
     </div>
@@ -45,41 +48,49 @@ export default {
     methods: {
         bubble() { 
             clearInterval(interval)
-
-            
+            var valid        = false
             var firstIndex   = 0
             var secondIndex  = 1
             var totalTicks   = 0
+            var temp_array   = [...this.data.arrayBar]
 
-            const interval   = setInterval( () => {
+            const interval = setInterval( () => {
                 var array        = [...this.data.arrayBar]
-                this.doAnimation(array[firstIndex], array[secondIndex])
                 
+                temp_array.sort((a, b) => { return a - b })
+                this.doAnimation(array[firstIndex], array[secondIndex])
                 if(array[firstIndex] > array[secondIndex]) {
-                    
+                    this.swapAnimmation(array[firstIndex], array[secondIndex])
                     var temp  = array[firstIndex]
                     array[firstIndex]   = array[secondIndex]
                     array[secondIndex]  = temp
-                    this.data.arrayBar = [...array]
                 }
-                
-
                 firstIndex++
                 secondIndex++
                 
                 if(firstIndex == this.data.arrayBar.length - totalTicks) {
-                    this.data.sortedArray.unshift(array[firstIndex])
                     firstIndex  = 0
                     secondIndex = 1
                     totalTicks++
+
+                    for(let i = 0 ; i < array.length ; i++) {
+                        if(array[i] != temp_array[i]) {
+                            valid = false
+                        } 
+                    }
+
+                    if(valid) {
+                        console.log('wow')
+                    }
                 }
 
                 if(totalTicks == this.data.arrayBar.length - 1) {
                     clearInterval(interval)
-                    console.log('done')
                 }
-                // this.data.arrayBar = [...array]
-            }, 500)
+
+                this.data.arrayBar = array
+                
+            }, 50)
 
             interval
         },
@@ -119,15 +130,12 @@ export default {
             secondElement
         ) {
             if(firstElement, secondElement) {
-                setTimeout(() => {
-                    document.querySelector('.BAR_'+firstElement).style.backgroundColor = '#6cdb7b'
-                    document.querySelector('.BAR_'+secondElement).style.backgroundColor = '#6cdb7b'
-                }, 100)
-                
+                document.querySelector('.BAR_'+firstElement).style.backgroundColor = '#6cdb7b'
+                document.querySelector('.BAR_'+secondElement).style.backgroundColor = '#6cdb7b'
 
-                // setTimeout(()=> {
-                //     this.setNormalColor(firstElement, secondElement)
-                // }, 140)
+                setTimeout(() => {
+                    this.setNormalColor(firstElement, secondElement)
+                }, 50)
             }
         },
 
@@ -153,5 +161,5 @@ export default {
 }
 </script>
 <style scoped>
-.array-container {text-align:center !important;}
+.array--container{text-align:center !important;}
 </style>
