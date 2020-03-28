@@ -53,7 +53,7 @@ export default {
             var secondIndex  = 1
             var totalTicks   = 0
             var temp_array   = [...this.data.arrayBar]
-
+            var temp
             const interval = setInterval( () => {
                 var array        = [...this.data.arrayBar]
                 
@@ -61,7 +61,7 @@ export default {
                 this.doAnimation(array[firstIndex], array[secondIndex])
                 if(array[firstIndex] > array[secondIndex]) {
                     this.swapAnimmation(array[firstIndex], array[secondIndex])
-                    var temp  = array[firstIndex]
+                    temp  = array[firstIndex]
                     array[firstIndex]   = array[secondIndex]
                     array[secondIndex]  = temp
                 }
